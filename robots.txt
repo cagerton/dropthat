@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /pub
+Disallow: /sub
+Disallow: /img
+Disallow: /upload
+Disallow: /badrobot

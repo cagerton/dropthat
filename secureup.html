@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+	<title>DropTh.at encrypted chat service.</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link href="dropth.at.css" rel="stylesheet" />
+	<script src="sjcl.js"></script>
+	<script>sjcl.random.startCollectors();</script>
+</head>
+<body>
+	<div class="container">
+		<header>
+			<h1>
+				<a class="logo" href="https://dropth.at">DropTh.at</a> by
+				<a class="logo" href="https://cardsnip.com">Cardsnip</a><sup class="logo">LABS</sup>
+				<small>An OpenResty chat demo.</small>
+			</h1>
+			<ul>
+				<li>The encryption key for each room is in the #fragment-identifier; it's not sent to the server.</li>
+				<li>Sharing the url will share the key. Loading the base url will generate a new one.</li>
+				<li>The server uses a "channel id" based on a one-way hash of the room key.</li>
+				<li>Remember kids, client-js-crypto does more to protect me than to protect you.</li>
+			</ul> 
+		</header>
+		<section class="chatbox drop-target">
+			<div class="stats"><div class="status"></div> Clients subscribed to this channel: <span class="users">?</span></div>
+			<div class="qr"></div>
+			<ul></ul>
+			<fieldset>
+				<input name='prefixinput' type='text' placeholder='nick'></input>:
+				<input name='textinput' type='text' placeholder='msg...'></input>
+				<button class="submit-text">Submit.</button>
+				<input type="file" id="input" name="fileinput" accept="image/*"></input>
+				<button class="submit-image">Snap.</button>
+			</fieldset>
+		</section>
+		<section class="psst">
+			<h3>Hey Matasano: JS crypto is not <a href="http://www.matasano.com/articles/javascript-cryptography/">harmfull</a>, it's just useful against a different class of attacks.</h1>
+			<ul>
+				<li>If my user data is subpoenaed, I can honestly say I've never had access to the keys.</li>
+				<li>It would be hard to argue that I am aware of copyright-infringing user content on this site.</li>
+				<li>I could let 3rd party sites use my file/chat APIs. Then I couldn't snoop if I wanted to.</li>
+				<li>I could build a shared CORS CDN that lets web sites verify asset signatures before using them.</li>
+			</ul>
+		</section>
+		<section class="psst">
+			<h3>I do care about your privacy, but here are some ways you'll get owned:</h3>
+			<ul>
+				<li>Someone will intercept the key when you send the channel link.</li>
+				<li>You'll share the link#key with the wrong person.</li>
+				<li>Someone will dig through your history and get your key.</li>
+				<li>Someone will pwn my server or find an xss hold and inject js to steal the key.</li>
+				<li>Someone will get a "trusted" CA to issue a cert then mitm you.</li>
+				<li><a href="http://xkcd.com/538/">This</a></li>
+			</ul>
+		</section>
+	</div>
+	<script src="qrcode.js"></script>
+	<script src="chat.js"></script>
+</body>
+</html>

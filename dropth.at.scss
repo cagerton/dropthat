@@ -1,0 +1,147 @@
+@import 'bourbon/bourbon';
+
+@media screen and (min-width: 900px) {
+	/* pretty background? */
+}
+
+$darkbg-color: rgb(230,232,228);
+
+@mixin indicator-light($color, $onlinecolor) {
+	display: inline-block;
+	border-radius: 100%;
+	width: 1.5em;
+	height: 1.5em;
+	margin-right: 5em;
+	@include radial-gradient( $color 0%, lighten($color, 20%) 60%, lighten($color, 60%) 90%);
+	&.online {
+		@include radial-gradient( $onlinecolor 0%, lighten($onlinecolor, 20%) 60%, lighten($onlinecolor, 60%) 90%);;	
+	}
+}
+@include font-face('Norwester', 'fonts/norwester');
+
+body {
+	text-align:center;
+	margin: 0;
+	padding: 0;
+	font-family: $helvetica;
+}
+body .container {
+	max-width: 920px;
+	margin: 0 auto;
+	text-align: left;
+}
+
+header {
+	background: $darkbg-color;
+	padding: 0.5em;
+	h1 {
+		padding-top: 0.2em;
+		padding-left: 1em;
+		font-size: 1.3em;
+	}
+	.logo {
+		font-size: 1.4em;
+		font-family: 'norwester', Helvetica, Arial;
+		text-decoration: none;
+	}
+	sup.logo {
+		font-size: 1em;
+	}
+	li {
+		font-size: 1em;
+		list-style: none;
+		margin: 0.4em;
+	}
+}
+
+section.psst {
+	background: $darkbg-color;
+	margin: 0;
+	padding: 0.5em;
+}
+
+button,
+input,
+li {
+	font-size: 1.2em;
+}
+ input,
+button {
+	display:inline-block;
+}
+input[name="textinput"]{ width: 25em; }
+input[name="prefixinput"] { width: 4em; }
+input[type="file"] { display: none; }
+
+.chatbox {
+	position: relative;
+	display: block;
+	border: 1px solid black;
+	overflow: scroll;
+
+	.stats {
+		display: inline-block;
+		width: 30em;
+		padding: 0;
+		margin: 10px;
+		vertical-align: bottom;
+		line-height: 1.5em;
+	}
+
+	.status {
+		@include indicator-light(rgb(185, 10, 10), rgb(10, 185, 10));
+		&:after {
+			line-height: 1.5em;
+			vertical-align: bottom;
+			padding-top: 0.2em;
+			margin-left: 2em;
+			content: "Offline.";
+		}
+		&.online {
+			&:after {
+				content: "Online.";
+			}
+		}
+		.users {
+			border: 1px solid blue;
+			display: inline-block;
+			min-width: 2em;
+			min-height: 1em;
+		}
+	}
+	.qr {
+		position: absolute;
+		top:0;
+		right: 0;
+		display: inline;
+		padding: 10px;
+		background: #fff;
+		border-bottom: 1px solid #ccc;
+		border-left: 1px solid #ccc;
+		border-bottom-left-radius: 10px;
+	}
+
+	ul {
+		margin: 0; 
+		padding: 0;
+		border: 1px solid #ccc;
+		height: 35em;
+		overflow: auto;
+
+		img {
+			max-height: 320px;
+			max-width: 320px;
+		}
+
+		li:nth-child(even) {
+			background: #fbfbfb;
+			border: 1px solid #eee;
+		}
+	}
+	&.over {
+		background: rgb(180,250,180);
+		border: 2px dashed rgb(200,200,200);
+		margin: 5px;
+	}
+}
+

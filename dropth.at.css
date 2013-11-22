@@ -1,0 +1,128 @@
+/*@import 'vendor/font-awesome-4.0.3/scss/_font-awesome';*/
+@media screen and (min-width: 900px) {
+  /* pretty background? */ }
+@font-face {
+  font-family: "Norwester";
+  font-weight: normal;
+  font-style: normal;
+  src: url("fonts/norwester.eot");
+  src: url("fonts/norwester.eot?#iefix") format("embedded-opentype"), url("fonts/norwester.woff") format("woff"), url("fonts/norwester.ttf") format("truetype"), url("fonts/norwester.svg#Norwester") format("svg"); }
+
+body {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+body .container {
+  max-width: 920px;
+  margin: 0 auto;
+  text-align: left; }
+
+header {
+  background: #e6e8e4;
+  padding: 0.5em; }
+  header h1 {
+    padding-top: 0.2em;
+    padding-left: 1em;
+    font-size: 1.3em; }
+  header .logo {
+    font-size: 1.4em;
+    font-family: 'norwester', Helvetica, Arial;
+    text-decoration: none; }
+  header sup.logo {
+    font-size: 1em; }
+  header li {
+    font-size: 1em;
+    list-style: none;
+    margin: 0.4em; }
+
+section.psst {
+  background: #e6e8e4;
+  margin: 0;
+  padding: 0.5em; }
+
+button,
+input,
+li {
+  font-size: 1.2em; }
+
+input,
+button {
+  display: inline-block; }
+
+input[name="textinput"] {
+  width: 25em; }
+
+input[name="prefixinput"] {
+  width: 4em; }
+
+input[type="file"] {
+  display: none; }
+
+.chatbox {
+  position: relative;
+  display: block;
+  border: 1px solid black;
+  overflow: scroll; }
+  .chatbox .stats {
+    display: inline-block;
+    width: 30em;
+    padding: 0;
+    margin: 10px;
+    vertical-align: bottom;
+    line-height: 1.5em; }
+  .chatbox .status {
+    display: inline-block;
+    border-radius: 100%;
+    width: 1.5em;
+    height: 1.5em;
+    margin-right: 5em;
+    background-color: #b90a0a;
+    background-image: -webkit-gradient(radial, center center, 0, center center, 460, color-stop(0%, #b90a0a), color-stop(60%, #f43535), color-stop(90%, #fff6f6));
+    background-image: -webkit-radial-gradient(#b90a0a 0%, #f43535 60%, #fff6f6 90%);
+    background-image: radial-gradient(  #b90a0a 0%, #f43535 60%, #fff6f6 90%); }
+    .chatbox .status.online {
+      background-color: #0ab90a;
+      background-image: -webkit-gradient(radial, center center, 0, center center, 460, color-stop(0%, #0ab90a), color-stop(60%, #35f435), color-stop(90%, #f6fff6));
+      background-image: -webkit-radial-gradient(#0ab90a 0%, #35f435 60%, #f6fff6 90%);
+      background-image: radial-gradient(  #0ab90a 0%, #35f435 60%, #f6fff6 90%); }
+    .chatbox .status:after {
+      line-height: 1.5em;
+      vertical-align: bottom;
+      padding-top: 0.2em;
+      margin-left: 2em;
+      content: "Offline."; }
+    .chatbox .status.online:after {
+      content: "Online."; }
+    .chatbox .status .users {
+      border: 1px solid blue;
+      display: inline-block;
+      min-width: 2em;
+      min-height: 1em; }
+  .chatbox .qr {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline;
+    padding: 10px;
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-bottom-left-radius: 10px; }
+  .chatbox ul {
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    height: 35em;
+    overflow: auto; }
+    .chatbox ul img {
+      max-height: 320px;
+      max-width: 320px; }
+    .chatbox ul li:nth-child(even) {
+      background: #fbfbfb;
+      border: 1px solid #eee; }
+  .chatbox.over {
+    background: #b4fab4;
+    border: 2px dashed #c8c8c8;
+    margin: 5px; }
