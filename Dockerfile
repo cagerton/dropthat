@@ -14,9 +14,6 @@ RUN chown -R nginx /opt/openresty/nginx/uploads
 RUN rm              /opt/openresty/nginx/conf/nginx.conf
 ADD chat.conf       /opt/openresty/nginx/conf/nginx.conf
 ADD chat.lua        /opt/openresty/nginx/conf/
-ADD start.sh        /opt/openresty/nginx/
 ADD static/         /opt/openresty/nginx/html/
 
-RUN chmod +x /opt/openresty/nginx/start.sh
-
-CMD ["/opt/openresty/nginx/start.sh"]
+CMD bash -c 'ulimit -n 65000 && /opt/openresty/nginx/sbin/nginx'
