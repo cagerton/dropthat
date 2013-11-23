@@ -16,17 +16,17 @@ TODO: fill in the details:
 
 ###Other things you could do with JS crypto:
 * You can offload expensive password hashing functions like bcrypt/scrypt to the client. (Salt with hash(username,site), hash again before storing). [link to gist? or rewrite?]
-* This could be used (with CORS) to build a public CDN that checks assets before use.
+* Client JS can be used (with CORS) to build a public CDN that checks assets before use.
 * Peer to peer / webrtc...
 
 ###Cool server shit:
-* Server sent events using Nginx and Lua. It's pretty neat.
+* Server sent events using Nginx and Lua. It's pretty neat. No, really.
 
 ###Things to fix:
 * iPhone canvas problem? Meh. Don't have one to test with. Works on iPad.
 * Needs responsive layout. Sucks on a small screen.
 * Add disclaimer about old and/or shitty browsers.
-* Some misc fixups. Maybe CSRF (less important since rooms are secret) & CSP + asset domains?
+* Some misc fixups. Maybe CSRF (less important since rooms are secret) + asset domains?
 * Add fonts.
 
 ###Some ways you'll get boned:
@@ -36,7 +36,7 @@ TODO: fill in the details:
 * Someone will dig through your history and get your key...
 * Someone will pwn my server or find an xss hold and inject js to steal the key....
 * Someone will get a "trusted" CA to issue a cert then mitm you. Then you'll get boned.
-* http://xkcd.com/538/ (Though, the wrench would be faster/more effective if I had keys)
+* http://xkcd.com/538/ (Could be me + a court order to inject js to steal keys).
 
 ###And then:
 * Hey Matasano, client JS Crypto isn't doomed; it's just useful against a different class of attacks.
@@ -44,4 +44,3 @@ TODO: fill in the details:
 
 ###Don't trust my minized version of SJCL, build your own:
 * https://github.com/bitwiseshiftleft/sjcl.git
-
