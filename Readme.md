@@ -1,4 +1,4 @@
-https://Dropth.at
+https://DropTh.at
 ================================
 
 Or how js-crypto can be an important part of this complete breakfast.
@@ -6,7 +6,7 @@ Or how js-crypto can be an important part of this complete breakfast.
 TODO: fill in the details:
 
 ###First, the server.
-* Server Sent Events using Nginx and Lua. It's pretty neat. No, really.
+* Server Sent Events using Nginx and Lua.
 * This is a standard html5 replacement for Comet / long polling.
 * Sends a stream of type text/event-stream with chunked content-transfer.
 * The server is basically a pub-sub engine. Clients subscribe to a channel.
