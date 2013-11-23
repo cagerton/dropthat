@@ -5,7 +5,7 @@ RUN apt-get install -y curl language-pack-en build-essential libpcre3-dev zlib1g
 					   libatomic-ops-dev libaio-dev python git
 
 # the ADD command breaks the build cache: ADD build.py /usr/src/
-RUN cd /usr/src && curl -O https://raw.github.com/cagerton/pugpug/master/pugpug.py && python ./build.py
+RUN cd /usr/src && curl -O https://raw.github.com/cagerton/dropthat/master/build.py && python ./build.py
 
 RUN useradd -r -M -s /bin/nologin nginx
 RUN bash -c "for i in {0..9} {a..z} {A..Z}; do mkdir -p /opt/openresty/nginx/uploads/\$i; done"
