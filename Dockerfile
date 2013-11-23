@@ -15,13 +15,7 @@ RUN rm              /opt/openresty/nginx/conf/nginx.conf
 ADD chat.conf       /opt/openresty/nginx/conf/nginx.conf
 ADD chat.lua        /opt/openresty/nginx/conf/
 ADD start.sh        /opt/openresty/nginx/
-
-ADD secureup.html   /opt/openresty/nginx/html/
-ADD sjcl.js         /opt/openresty/nginx/html/
-ADD qrcode.js       /opt/openresty/nginx/html/
-ADD robots.txt      /opt/openresty/nginx/html/
-ADD dropth.at.css   /opt/openresty/nginx/html/
-ADD chat.js         /opt/openresty/nginx/html/
+ADD static/         /opt/openresty/nginx/html/
 
 RUN chmod +x /opt/openresty/nginx/start.sh
 

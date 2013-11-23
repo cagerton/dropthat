@@ -1,5 +1,6 @@
 "use strict";
 (function _main(){
+	sjcl.random.startCollectors();
 
 	var b64 = sjcl.codec.base64url,
 		sha2 = sjcl.hash.sha256,
@@ -219,7 +220,7 @@
 	        		console.log('pixel ratio:', window.devicePixelRatio);
 	        	}*/
 
-	        	var maxdim = 320,
+	        	var maxdim = 480,
 	        	    scale = Math.min(1, maxdim / Math.max(img.width, img.height)),
 	        	    canWidth  = (img.width * scale )|0,
 	        	    canHeight = (img.height * scale )|0;
@@ -228,7 +229,7 @@
 	        	canvas.height = canHeight;
 	            ctx.drawImage(this, 0, 0, canWidth, canHeight);
 
-	            var imageUrl = canvas.toDataURL("image/jpeg",0.8),
+	            var imageUrl = canvas.toDataURL("image/jpeg",0.95),
 					duriEvent = new CustomEvent('input.img.datauri', {'detail': imageUrl});
 				document.dispatchEvent(duriEvent);
 	        }

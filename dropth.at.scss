@@ -1,5 +1,4 @@
 @import 'bourbon/bourbon';
-
 @media screen and (min-width: 900px) {
 	/* pretty background? */
 }
@@ -25,7 +24,9 @@ body {
 	padding: 0;
 	font-family: $helvetica;
 }
+
 body .container {
+	position: relative;
 	max-width: 920px;
 	margin: 0 auto;
 	text-align: left;
@@ -145,3 +146,42 @@ input[type="file"] { display: none; }
 	}
 }
 
+$visited-link-color: rgb(85, 26, 139);
+footer {
+	text-align: center;
+	margin-top: 1em;
+	margin-bottom: 2em;
+}
+.contact-email {
+	cursor: pointer;
+	color: $visited-link-color;
+	text-decoration: underline;
+	&::before {
+		text-decoration: underline;
+		display: inline-block;
+		content: "info";
+	}
+	content: "@";
+	&::after {
+		width: 5em;
+		content: "cardsnip.com";
+	}
+	&:active{
+		content: "&nbsp;";
+		color: transparent;
+		&::before { content: " ";}
+		&::after {
+			color: $visited-link-color;
+			font-size: 1em;
+			content: "DO IT! DO IT NOW!";
+			width: 10em;
+		}
+	}
+}
+
+img.fork-me-hard {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: 0;
+}

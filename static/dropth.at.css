@@ -1,4 +1,3 @@
-/*@import 'vendor/font-awesome-4.0.3/scss/_font-awesome';*/
 @media screen and (min-width: 900px) {
   /* pretty background? */ }
 @font-face {
@@ -15,6 +14,7 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
 body .container {
+  position: relative;
   max-width: 920px;
   margin: 0 auto;
   text-align: left; }
@@ -126,3 +126,37 @@ input[type="file"] {
     background: #b4fab4;
     border: 2px dashed #c8c8c8;
     margin: 5px; }
+
+footer {
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 2em; }
+
+.contact-email {
+  cursor: pointer;
+  color: #551a8b;
+  text-decoration: underline;
+  content: "@"; }
+  .contact-email::before {
+    text-decoration: underline;
+    display: inline-block;
+    content: "info"; }
+  .contact-email::after {
+    width: 5em;
+    content: "cardsnip.com"; }
+  .contact-email:active {
+    content: "&nbsp;";
+    color: transparent; }
+    .contact-email:active::before {
+      content: " "; }
+    .contact-email:active::after {
+      color: #551a8b;
+      font-size: 1em;
+      content: "DO IT! DO IT NOW!";
+      width: 10em; }
+
+img.fork-me-hard {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0; }

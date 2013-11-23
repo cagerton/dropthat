@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+    <title>DropTh.at encrypted image host.</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- WARNING: Firefox does not support meta http-equiv csp tag yet. Use the http header in prod! -->
+    <meta http-equiv="content-security-policy" 
+          content="default-src 'self' 'unsafe-inline' data:; connect-src 'self' https://corscdn.cardsnip.com" />
+
+    <link href="dropth.at.css" rel="stylesheet" />
+    <link rel="stylesheet" href="gist.css">
+
+    <script src="sjcl.js"></script>
+    <script>sjcl.random.startCollectors();</script>
+    <style>
+        section, header {max-width: 780px;}
+        p { max-width: 630px; margin: 1em auto; line-height: 1.5em;}
+        header, h3 { text-align: center;}
+        img { width: 480px; height: 384px; margin: 0 auto;}
+        pre { background: rgb(240,240,250); padding: 0.5em; }
+        /* .good { border: 2px solid green; } */
+        .error {
+            /* Red pixel data from image magick: convert -size 1x1 canvas:red gif:- | base64  */
+            background: url(data:image/gif;base64,R0lGODlhAQABAPAAAP8AAAAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==) repeat; 
+        }
+        .imgwrap { display: block; width: 100%; text-align: center;}
+        .autogist {
+            margin: 0 auto;
+            font-size: 12px;
+            max-width: 650px;
+            margin-top: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                <a class="logo" href="https://dropth.at">DropTh.at</a> by
+                <a class="logo" href="https://cardsnip.com">Cardsnip</a><sup class="logo">LABS</sup>
+                <small>A secure CDN demo.</small>
+            </h1>
+        </header>
+        <section>
+            <h3>This image is loaded with a CORS-CDN using client js check integrity and decrypt.</h3>
+            <div class="imgwrap">
+                <img class="encrypted-image"
+                     data-src="https://corscdn.cardsnip.com/corscdn/encrypted_example?5TnTJWMX35hj"
+                     data-key="#n9vkf31U1mBsfL6D9dQUAw" 
+                     data-shasum="5TnTJWMX35hjO2uiO2sn2YM6NUAzNE2ABE4kfR8gASU" src=""></img>
+            </div>
+            <code><pre>
+            &lt;img class="encrypted-image" 
+                    data-src="https://corscdn.cardsnip.com/corscdn/encrypted_example"
+                    data-key="#n9vkf31U1mBsfL6D9dQUAw" 
+                    data-shasum="nX7ESfe3_8RPjgkuQ1z4dwIDsgS_vJ7DDkXpritKDYE" src="">&lt;/img>
+            </pre></code>
+            <p>Here the image asset is loaded via a Javascript XHR from a demo "CORS-CDN" server that allows <a href="http://www.w3.org/TR/cors/">Cross-Origin-Resource-Sharing</a>. The image load script checks to ensure that the image has not been tampered with.</p>
+            <p>This demo also wraps the image asset in a layer of encryption using <a href="http://bitwiseshiftleft.github.io/sjcl/">SJCL</a>. The encryption key never touches the CORS-CDN server. This adds significant protection from snooping by a 3rd party CORS-CDN provider - assuming they don't host the rest of the site.</p>
+            <p>It's also worth pointing out that this obviously can't protect the first "seed" page+script from script injection.</p>
+            <p>This demo uses an image, but it works for CSS, Javascript, Fonts, and so on.</p> 
+            <p>Do you trust cdnjs? bootstrapcdn? aspnetcdn? googlecdn? You shouldn't need to.</p>
+            <p>For public assets, you can skip the encryption and just specify the sha2 hash.</p>
+            <p>I'd love to try adding localStorage caching and WebRTC peer-to-peer data...</p>
+            <div class="autogist" id="gist-202e4e0c04e587a26eb6"></div>
+        </section>
+    </div>
+    <script>
+/*  This script demonstrates loading an asset from an "untrusted" 3rd party CDN.
+    It checks the asset integrity and decrypts it before using. The key for the
+    encryption is stored in the document fragment of the data-src attribute.
+    User *must* handle the main page, sjcl, and this script in a secure manner. */
+var b64 = sjcl.codec.base64url,
+    sha2 = sjcl.hash.sha256, 
+    rxp = new RegExp('^data:image\/jpeg;base64,[a-zA-Z0-9_\\-\\+\\/]+\={0,2}$'),
+    imgs = [].slice.apply(document.querySelectorAll('img.encrypted-image'));
+imgs.forEach(decryptImage);
+
+function decryptImage(el){
+    var url = el.dataset.src,
+        expected = el.dataset.shasum,
+        key = el.dataset.key,
+        xhr = new XMLHttpRequest(),
+        start = new Date();
+
+    if (key=='doc-frag'){
+        key = document.location.hash;
+    }
+    function abort(msg){
+        el.classList.add('error');
+        console.log("ERROR: ",msg);
+        throw new Error(msg);            
+        xhr=null;
+    }
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function _handle_ready(){
+        var dataURI;
+        if(xhr.readyState == 4 && xhr.status==200){
+            console.log("Got asset: ",Date.now()-start,"ms");
+            if(b64.fromBits(sha2.hash(xhr.responseText)) != expected){
+                abort("Error with image checksum.");
+            }
+            console.log("Got past checksum: ",Date.now()-start,"ms");
+            if(key === undefined){
+                // Unencrypted, but verified. Public/shared assets.
+                dataURI = xhr.responseText;
+            }else{
+               try {
+                dataURI = sjcl.decrypt(key, xhr.responseText);
+                }catch(e){
+                    abort(e);
+                }
+            }
+            if(rxp.exec(dataURI)){ // Looks like an image?
+                el.src = dataURI;
+                el.classList.add('good');
+                console.log("Took approx: ",Date.now()-start,"ms");
+            }else{
+                abort("Error decoding image.");
+            }
+        }else if(xhr.state == 4){
+            abort("Error downloading image.");
+        }
+    }
+    xhr.send();
+}
+    </script>
+    <script src="gist.js"></script>
+    <script>
+        /* Example script loading */
+        var s = document.createElement('script');
+        s.nonce = 'Nc3n83cnSAd3wc3Sasdfn939hc3';
+        s.src="data:application/json;base64,Y29uc29sZS5sb2coImhpIHRoZXJlLiAtLWRhdGEtdXJpLXNjcmlwdCIp";
+        document.head.appendChild(s);
+    </script>
+</body>
+</html>

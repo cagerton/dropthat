@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+    <!-- WARNING: Firefox does not support meta http-equiv csp tag yet. Use the http header in prod! -->
+    <meta http-equiv="content-security-policy" 
+          content="default-src 'self'; img-src 'self' data:;" />
+
+	<title>DropTh.at encrypted chat service.</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link href="dropth.at.css" rel="stylesheet" />
+	<script src="sjcl.js"></script>
+</head>
+<body>
+	<div class="container">
+		<header>
+			<h1>
+				<a class="logo" href="https://dropth.at">DropTh.at</a> by
+				<a class="logo" href="https://cardsnip.com">Cardsnip</a><sup class="logo">LABS</sup>
+				<small>An OpenResty chat demo.</small>
+			</h1>
+			<!--ul-->
+			<p>The encryption key for each room is in the #fragment-identifier; it's not sent to the server.</p>
+			<p>Sharing the url will share the key. Loading the base url will generate a new one.</p>
+			<p>Learn more. Read the source. Run your own. Read warnings. <a href="https://github.com/cagerton/dropthat/">Github Project</a></p>
+			<p>See also: <a href="/cors-cdn-demo">CORS-CDN demo.</a>
+			</ul>
+		</header>
+		<section class="chatbox drop-target">
+			<div class="stats"><div class="status"></div> Clients in this channel: <span class="users">?</span></div>
+			<div class="qr"></div>
+			<ul></ul>
+			<fieldset>
+				<input name='prefixinput' type='text' placeholder='nick'></input>:
+				<input name='textinput' type='text' placeholder='msg...'></input>
+				<button class="submit-text">Submit.</button>
+				<input type="file" id="input" name="fileinput" accept="image/*"></input>
+				<button class="submit-image">Snap.</button>
+			</fieldset>
+		</section>
+		<footer>
+			Need to report abuse? Want to send me hatemail? Love letters? Want to Join us? <span class="contact-email">@</span>
+		</footer>
+		<a href="https://github.com/cagerton/dropthat/"><img class="fork-me-hard" src="forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+	</div>
+	<script src="qrcode.js"></script>
+	<script src="chat.js"></script>
+	
+</body>
+</html>
