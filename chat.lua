@@ -117,7 +117,7 @@ function publish_event(channel_id, event_id, event, message)
         for sock,start_time in pairs(channel.sockets) do
             if not shit_list[sock] then
                 local bytes, err = sock:send(chunk)
-                if not bytes ~= string.len(chunk) then
+                if bytes ~= string.len(chunk) then
                     ngx.log(ngx.INFO, "failed to write event? adding to shit list", err)
                     shit_list[sock] = true
                 end
