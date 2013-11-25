@@ -1,10 +1,11 @@
 module("chat", package.seeall)
 
+local cjson      = require "cjson"
 local upload     = require "resty.upload"
 local uploads_dir = "/opt/openresty/nginx/uploads/"
 local chunk_size  = 4096
 
-local stats  = { sub_open=0, sub_close=0, chan_open=0, chan_close=0, msg_send=0, broken_count=0 }    -- holds global stats
+local stats  = { sub_open=0, sub_close=0, chan_open=0, chan_close=0, msg_send=0, msg_recv=0, broken_count=0, start=ngx.now() }  -- holds global stats
 local channels = {}  -- holds info for each channel
 local shit_list = {} -- holds broken sockets.
 
@@ -16,6 +17,10 @@ local http_header = "HTTP/1.1 200 OK\r\n"..
                     "Server: dropth.at\r\n"..
                     "Connection: keep-alive\r\n"..
                     "Transfer-Encoding: chunked\r\n\r\n"
+
+function get_json_stats()
+    return cjson.encode(stats)
+end
 
 local function format_http_chunk(message) -- for chunked transfer-encoding
     local len = string.format("%x\r\n", string.len(message))
@@ -114,12 +119,15 @@ function publish_event(channel_id, event_id, event, message)
     local chunk = format_event(event_id, event, message)
     local channel = channels[channel_id]
     if channel then
+        stats.msg_send = stats.msg_send + 1
         for sock,start_time in pairs(channel.sockets) do
             if not shit_list[sock] then
                 local bytes, err = sock:send(chunk)
                 if bytes ~= string.len(chunk) then
                     ngx.log(ngx.INFO, "failed to write event? adding to shit list", err)
                     shit_list[sock] = true
+                else
+                    stats.msg_recv = stats.msg_recv + 1
                 end
             end
         end
