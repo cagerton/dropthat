@@ -116,9 +116,9 @@ function channel_count(channel_id)
 end
 
 function publish_event(channel_id, event_id, event, message)
-    local chunk = format_event(event_id, event, message)
     local channel = channels[channel_id]
     if channel then
+        local chunk = format_event(event_id, event, message)
         stats.msg_send = stats.msg_send + 1
         for sock,start_time in pairs(channel.sockets) do
             if not shit_list[sock] then
@@ -146,21 +146,15 @@ end
 -- (until then kill server when reloading)
 -- in server directive: set_by_lua $something 'chat.check_init()';
 local function notify_thread(premature)
-    ngx.log(ngx.ERR, "Notify thread running.")
+    ngx.log(ngx.INFO, "Notify thread running.")
     local loops = 0
     while true do
-        loops = loops + 1
-        if loops == 20 then
-            local cons = stats.sub_open - stats.sub_close
-            ngx.log(ngx.CRIT, "Hper;Derp. Connections: "..cons)        
-            loops = 0
-        end
         local channel_id = pop_update_queue()
         if channel_id then
             local now = ngx.now();
             local channel = channels[channel_id]
-            if channel and now < 0.373 + channel.last_announce then  -- not horrible; could be better.
-                ngx.sleep(0.373) -- meh.
+            if channel and now < 0.373 + channel.last_announce then
+                ngx.sleep(0.373)
             end
             channel = channels[channel_id]
             if channel then
@@ -174,11 +168,9 @@ local function notify_thread(premature)
 end
 
 function check_init()
-    ngx.log(ngx.ERR, "Started notify thread.")
+    ngx.log(ngx.INFO, "Started notify thread.")
     ngx.timer.at(0, notify_thread)
-    check_init = function()
-        --ngx.log(ngx.ERR, "NOP. (was check_init)")
-    end
+    check_init = function() end
 end
 
 local blank_chunk = format_http_chunk(":\r\n")
@@ -218,9 +210,8 @@ function event_source_location()
     while 1 do
         ngx.sleep(3.617)
         loops = loops + 1
-        if loops == 6 then
+        if loops % 6 == 0 then
             send_blank(sock)
-            loops = 0
         end
         local channel = channels[channel_id]
         if shit_list[sock] then

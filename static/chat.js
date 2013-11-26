@@ -53,7 +53,7 @@
 		var encoded = e.data,
 			msg;
 		try{
-			msg = sjcl.decrypt(room,e.data);
+			msg = sjcl.decrypt(room,JSON.parse(e.data));
 			log(msg);
 		}catch(err){
 			console.log("Fail:",e.data)
