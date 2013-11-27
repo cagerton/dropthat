@@ -1,5 +1,5 @@
-JS Crypto is an important part of this complete breakfast
-=========================================================
+On Javascript Cryptography
+==========================
 JS Crypto isn't [doomed](http://www.matasano.com/articles/javascript-cryptography/), it just solves different problems.
 
 ### Preface
@@ -8,7 +8,7 @@ JS Crypto isn't [doomed](http://www.matasano.com/articles/javascript-cryptograph
 
 There is lots of room for improvement in the DropTh.at demo.  For example, clients could use public key cryptography and key exchange algorithms so that the encryption keys for your data aren't shared along with the URL #fragment-idenitfier.  Remember that none of this is secure unless you can safely deliver the javascript and html to the users (over SSL) in the first place.
 
-### Client Crypto forms an implicit contract - even if it's not Fort Knox:
+### Client Crypto is an implicit contract:
 
 If clients encrypt files/messages/images/etc before sending to a web service, it lays out a contract of trust between customers and the hosting service.  
 * We won't read your stuff.
@@ -25,9 +25,7 @@ Lets take [Mega](https://mega.co.nz/) as an example (I haven't verified this com
 
 ### Untrusted Public CDNs:
 
-We like Public CDNs (bootstrapcdn, cdnjs, googlecdn, etc), but we shouldn't have to trust them.  I'm sure they've all got great security, but an attack on a big public cdn could have wide reaching implications.  https://corscdn.cardsnip.com sounds pretty shady, right?  But I've got no worries hosting my images on a "CDN" in this demo: https://dropth.at/cors-cdn-demo  - This same concept of CDN content verification could be applied to shared, public assets while still taking advantage of browser http caching (You'd probably skip the encryption if it was just jquery.js). 
-
-You could even roll with this today! Many CDNs let you add Access-Control-Allow-Origin headers already due to web font security restrictions. [Like this one](http://support.maxcdn.com/howto/use-cdn-with-webfonts/)
+We like Public CDNs (bootstrapcdn, cdnjs, googlecdn, etc), but we shouldn't have to trust them.  I'm sure they've all got great security, but an attack on a big public cdn could have wide reaching implications.  You can use Javascript to verify assets (both shared and private) before using/running them. Proof of concept: https://dropth.at/cors-cdn-demo
 
 ### Password Hashing:
 
