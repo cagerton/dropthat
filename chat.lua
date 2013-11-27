@@ -181,8 +181,8 @@ function send_blank(sock)
     end
 end
 
-function event_source_location()
-    local channel_id = ngx.var.channel
+function event_source_location(channel_id)
+
     local sock, err = ngx.req.socket(true)
     if not sock then
         ngx.log(ngx.ERR, "server: failed to get raw req socket: ", err)
@@ -206,7 +206,6 @@ function event_source_location()
     add_socket(channel_id, sock)
 
     local loops = 0
-    local shit_list = channels[channel_id]
     while 1 do
         ngx.sleep(3.617)
         loops = loops + 1
