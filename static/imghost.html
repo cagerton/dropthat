@@ -5,12 +5,16 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+
     <!-- WARNING: Firefox does not support meta http-equiv csp tag yet. Use the http header in prod! -->
     <meta http-equiv="content-security-policy" 
-          content="default-src 'self' 'unsafe-inline' data:; connect-src 'self' https://corscdn.cardsnip.com" />
+          content="default-src 'self' 'unsafe-inline' data:; connect-src 'self' https://corscdn.cardsnip.com https://cdnjs.cloudflare.com" />
 
     <link href="dropth.at.css" rel="stylesheet" />
     <link rel="stylesheet" href="gist.css">
+
+    <link rel="prefetch" href="https://corscdn.cardsnip.com/corscdn/encrypted_example?5TnTJWMX35hj" />
+    <link rel="prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.10/d3.min.js" />
 
     <script src="sjcl.js"></script>
     <script>sjcl.random.startCollectors();</script>
@@ -53,27 +57,38 @@
             </div>
             <code><pre>
             &lt;img class="encrypted-image" 
-                    data-src="https://corscdn.cardsnip.com/corscdn/encrypted_example"
+                    data-src="https://corscdn.cardsnip.com/corscdn/encrypted_example?5TnTJWMX35hj"
                     data-key="#n9vkf31U1mBsfL6D9dQUAw" 
-                    data-shasum="nX7ESfe3_8RPjgkuQ1z4dwIDsgS_vJ7DDkXpritKDYE" src="">&lt;/img>
+                    data-shasum="5TnTJWMX35hjO2uiO2sn2YM6NUAzNE2ABE4kfR8gASU" src="">&lt;/img>
+
+            &lt;script class="corscdn"
+                type="text/javascript"
+                data-src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"
+                data-shasum="E9npzkBhxrZIdosJo20ACnv7qWnUVwzzKfk47eao85M=">&lt;script>
+
+
             </pre></code>
-            <p>Here the image asset is loaded via a Javascript XHR from a demo "CORS-CDN" server that allows <a href="http://www.w3.org/TR/cors/">Cross-Origin-Resource-Sharing</a>. The image load script checks to ensure that the image has not been tampered with.</p>
-            <p>This demo also wraps the image asset in a layer of encryption using <a href="http://bitwiseshiftleft.github.io/sjcl/">SJCL</a>. The encryption key never touches the CORS-CDN server. This adds significant protection from snooping by a 3rd party CORS-CDN provider - assuming they don't host the rest of the site.</p>
-            <p>It's also worth pointing out that this obviously can't protect the first "seed" page+script from script injection.</p>
-            <p>This demo uses an image, but it works for CSS, Javascript, Fonts, and so on.</p> 
-            <p>Do you trust cdnjs? bootstrapcdn? aspnetcdn? googlecdn? You shouldn't need to.</p>
-            <p>For public assets, you can skip the encryption and just specify the sha2 hash.</p>
-            <p>I'd love to try adding localStorage caching and WebRTC peer-to-peer data...</p>
+            <p>Here the image asset is loaded via a Javascript XHR from a "CDN" that allows <a href="http://www.w3.org/TR/cors/">Cross-Origin-Resource-Sharing</a>. The image load script checks to ensure that the image has not been tampered with.</p>
+            <p>This demo also wraps the image asset in a layer of encryption using <a href="http://bitwiseshiftleft.github.io/sjcl/">SJCL</a>. The encryption key never needs to touch the CDN server. This adds significant protection from snooping by the CDN - assuming they don't host the rest of the site.</p>
+            <p>This demo uses an image, but it works for CSS, Javascript, Fonts, and so on. This would be easy to add to an async JS loader.</p> 
+            <p>Do you trust cdnjs? bootstrapcdn? aspnetcdn? googlecdn? You shouldn't need to. Most of them support CORS and you could start verifying these today. It could be quite easy to integrate this into an async loader framework.</p>
+            <p>Remember, this can't verify the initial assets. It can however reduce the 
             <div class="autogist" id="gist-202e4e0c04e587a26eb6"></div>
         </section>
     </div>
+
+
+    <script class="corscdn"
+                type="text/javascript"
+                data-src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.10/d3.min.js"
+                data-shasum="LCxiuGAdKmITwOdaUsNBlT0iyhcEsR9GPeL8iJcvQQE"></script>
     <script>
+
 /*  This script demonstrates loading an asset from an "untrusted" 3rd party CDN.
     It checks the asset integrity and decrypts it before using. The key for the
     encryption is stored in the document fragment of the data-src attribute.
     User *must* handle the main page, sjcl, and this script in a secure manner. */
-var b64 = sjcl.codec.base64url,
-    sha2 = sjcl.hash.sha256, 
+var b64 = sjcl.codec.base64url, sha2 = sjcl.hash.sha256, 
     rxp = new RegExp('^data:image\/jpeg;base64,[a-zA-Z0-9_\\-\\+\\/]+\={0,2}$'),
     imgs = [].slice.apply(document.querySelectorAll('img.encrypted-image'));
 imgs.forEach(decryptImage);
@@ -126,14 +141,92 @@ function decryptImage(el){
     }
     xhr.send();
 }
+</script>
+
+<script> // Perf Experiment: ////////////////////////////////
+
+/* Example script loading
+var s = document.createElement('script');
+s.nonce = 'Nc3n83cnSAd3wc3Sasdfn939hc3';
+s.src="data:application/javascript;base64,Y29uc29sZS5sb2coImhpIHRoZXJlLiAtLWRhdGEtdXJpLXNjcmlwdCIp";
+document.head.appendChild(s); */
+
+if(!window.performance) window.performance = {};
+if(!window.performance.now) window.performance.now = Date.now;
+
+sjcl.codec.arrayBuff = {
+    toBits: function(ab){
+        var data = new DataView(ab),
+            out =[], i, tmp=0;
+        for (i=0; i < (data.byteLength & ~3); i+=4) {
+            out.push(data.getInt32(i));
+        }
+        if(ab.byteLength & 3){
+            for (i ; i < ab.byteLength; i++){
+                tmp = tmp << 8 | data.getInt8(i);
+            }
+            out.push(sjcl.bitArray.partial(8*(i&3), tmp));
+        }
+        return out;
+    }
+};
+
+function blobFetchScript(el){
+    var xhr = new XMLHttpRequest(),
+        start = new Date(),
+        p0,p1,p2;
+    xhr.open('GET', el.dataset.src, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onreadystatechange = function _handle_ready(){
+        if(xhr.readyState == 4 && xhr.status == 200){
+            p0 = window.performance.now();
+            var b = sjcl.codec.arrayBuff.toBits(xhr.response);
+            p1 = window.performance.now();
+            if(b64.fromBits(sha2.hash(b)) == el.dataset.shasum){
+                var blob = new Blob([xhr.response], {type : 'application/javascript'});
+                el.src = window.URL.createObjectURL(blob);
+            }else{
+                return console.log("Error with script checksum.");
+            }
+        }
+    }
+    el.onload = function(){
+        p2 = window.performance.now();
+        console.log("Script Loaded. enc:", (p1-p0), "and post:", (p2-p1), "ms",'abs:', p2);
+    }
+    xhr.send();
+}
+
+function verifyAndFetchScript(el){
+    var xhr = new XMLHttpRequest(),
+        start = new Date(),
+        p0,p1,p2;
+    xhr.open('GET', el.dataset.src, true);
+    xhr.onreadystatechange = function _handle_ready(){
+        if(xhr.readyState == 4 && xhr.status == 200){
+            p0=window.performance.now();
+            var b = sjcl.codec.utf8String.toBits(xhr.responseText);
+            p1 = window.performance.now();
+            if(b64.fromBits(sha2.hash(b)) == el.dataset.shasum){
+                el.src = 'data:application/javascript;base64,'+btoa(xhr.responseText);
+            }else{
+                return console.log("Error with script checksum.");
+            }
+        }
+    }
+    el.onload = function(){
+        p2 = window.performance.now();
+        console.log("Script Loaded. enc:", (p1-p0), "and post:", (p2-p1), "ms",'abs:', p2);
+    }
+    xhr.send();
+}
+
+if(window.Blob){
+    blobFetchScript(document.querySelector('.corscdn'));  // wow.
+}else{
+    verifyAndFetchScript(document.querySelector('.corscdn'));
+}
     </script>
     <script src="gist.js"></script>
-    <script>
-        /* Example script loading */
-        var s = document.createElement('script');
-        s.nonce = 'Nc3n83cnSAd3wc3Sasdfn939hc3';
-        s.src="data:application/json;base64,Y29uc29sZS5sb2coImhpIHRoZXJlLiAtLWRhdGEtdXJpLXNjcmlwdCIp";
-        document.head.appendChild(s);
-    </script>
 </body>
 </html>
