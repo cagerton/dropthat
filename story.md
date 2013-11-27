@@ -277,7 +277,3 @@ console.log("Hashing took approx ",Date.now()-start, "ms");
 
 > django.utils.crypto.pbkdf2: 105ms on my laptop.
 
-### Conclusion
-
-Javascript gives you enough flexability to punch yourself in the back of the head, but it gives you such flexibility.
-
