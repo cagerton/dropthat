@@ -32,7 +32,7 @@ events.addEventListener('count', function(c){ console.log("Got ", c); });
 
 The server is built with [OpenResty](http://openresty.org/); that's Nginx, Lua, and a few extra modules. Leafo has a [nice intro](http://leafo.net/posts/creating_an_image_server.html) to building with OpenResty if you're not familiar. I highly suggest you check it out.
 
-I'll assume you understand the basics of Nginx and Lua from this point.  Here are my core pub/sub locations in the nginx config. [Full Version](https://github.com/cagerton/dropthat/blob/master/chat.conf)
+I'll assume you understand the basics of Nginx and Lua from this point.  Here are my core pub/sub locations in the [nginx config](https://github.com/cagerton/dropthat/blob/master/chat.conf).
 ```nginx
 worker_processes 1;
 http {
@@ -140,8 +140,6 @@ function publish_event(channel_id, event_id, event, message)
     end
 end
 ```
-Well, that was easy.
-
 The server sends count events when the number of subscibers for a channel changes. I found out the hard way that these need to be rate limited while load testing with 20k clients on a virtual machine. Here's how the notification thread works:
 ```lua
 function check_init()
@@ -229,13 +227,13 @@ On Javascript Cryptography
 
 ### Preface
 
-Javascript Cryptography isn't [inherently doomed](http://www.matasano.com/articles/javascript-cryptography/); it's just useful for different different types of problems.
+Javascript Cryptography isn't [inherently doomed (Matasano)](http://www.matasano.com/articles/javascript-cryptography/); it's just useful for different different types of problems.
 
 ### Intro
 
 My usage of encryption on the DropTh.at demo is very simple. The interesting crypto is handled by [SJCL](http://bitwiseshiftleft.github.io/sjcl/), the keys are stored in the fragment-identifier of the url (that part that doesn't get sent with the request; handle that url like a password), and the room channel ids are derived from a one way SHA hash of the room keys. Messages and images are encrypted using the same default settings in SJCL. It handles building random IVs, ensuring availability of sufficent entropy and encrypting with AES-CCM mode.  Remember that none of this is secure unless you can safely get the javascript and html (over SSL) in the first place.  There's lots of room for improvement here.
 
-Here are some of the things that JS crypto can offer that SSL can't.
+Here are some of the things that JS crypto can add to traditional HTTPS.
 
 ### Client Crypto is an implicit contract:
 
