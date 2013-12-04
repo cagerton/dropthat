@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <!-- dear safari, lay off the on crack -->
+    <meta http-equiv="content-security-policy" content="default-src 'self' blob:;style-src 'self' 'unsafe-inline' blob: data:; connect-src *; font-src blob: data: 'self'" />
+    
+    <!-- sha2.js contains hashing code from SJCL; loader.js is where the magic happens. -->
+    <script src="sha2.js"></script>
+    <script src="loader.js"></script>
+
+    <style>
+        /* wait a tick if we're not cached */
+        body { margin-left: 100%; font-size:1.2em;}
+    </style>
+
+    <link   data-href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"
+    		data-sha="HjsFM2lE3IJXUCrzudBjvWYpXHma/prhNo7d+0224lA="
+    		data-type="text/css"
+    		rel="stylesheet">
+    
+    <link   data-href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
+            data-sha="MIPo07Id3D8ObWXsNYCqbt+q3KXZc32cqifmojPhzPM="
+            data-type="text/css"
+            rel="stylesheet">
+
+    <!-- all modern browsers support woff anwyay: -->
+    <link  data-href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/fonts/fontawesome-webfont.woff?v=4.0.3"
+            data-sha="D9KP7Onr1ga4sHFGDr0/wu17x6Zu+RyINPEd+sq0qEk="
+            data-template="@font-face{font-family: 'FontAwesome'; src:url(blob:) format('woff');font-weight: normal;font-style: normal;}"
+            data-type="application/font-woff"
+            rel="stylesheet">
+
+    <script data-type="text/javascript"
+	        data-src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.10/d3.min.js"
+	        data-sha="LCxiuGAdKmITwOdaUsNBlT0iyhcEsR9GPeL8iJcvQQE=" charset="utf-8"></script>
+
+    <script data-type="text/javascript"
+	        data-src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"
+	        data-sha="pXtSQrmprcTB74RsNlFHuJxHK5zXcPrOMx78uWU0ayU="></script>
+</head>
+<body>
+	<div class="container">
+        <main class="col-md-8 col-md-offset-2">
+            <h1><i class="fa fa-random"></i> sha2loader</h1>
+            <h3>Do you trust bootstrapcdn? cdnjs? aspnetcdn? googlecdn?<h3>
+            <h3> <b>You shouldn't need to.</b></h3>
+        	<p>Sha2loader acts as an async asset loader and integrity verifier for scripts / css / images / or fonts that are hosted on servers outside your control. It lets you verify that each asset is exactly what you expected before using it. This could help mitigate the impact of public-CDN compromise or just reduce the number of your own servers that you need to trust.</p>
+            <h3>How it works:</h3>
+            <p>Once you've loaded sha2loader (preferably compressed to with sjcl and hosted on your own server) you can include tags with the data-sha and data-href/url attributes. You can also include a template to render css with blob-urls (for font loading). You'll need to specify urls that allow <a href="http://www.w3.org/TR/cors">cross origin resource shraring</a>.</p>
+            <p>This page loads bootstrap.css, d3.js, jquery.js, font-awesome icons, and a jpg image using several distinct CDNs.</p>
+        	
+            <h3>Under the hood</h3>
+            <p>The <a href="loader.js">loader.js</a> code is super simple. DOM modifications are picked up with a MutationObserver; any freshly inserted nodes containing the data-sha attribute are hijacked. The coresponding resources are loaded with XMLHttpRequests that have responseType='arraybuffer'.  It's relatively fast and easy to feed this response type into SJCL for hashing and then to convert it in to a blob-url for use. The whole process has significantly less overhead that I originally expected.</p>
+            <h3>On a practical note</h3>
+            <p>Most CDNs are probably more secure than your servers, this is experimental code, and the RightWay&trade; to do this might involve adding native hash-checking support to the HTML spec. This is meant to be food for thought.</p>
+            <p>
+            <img width="310" height="414"
+        			data-type="image/jpeg"
+        			data-src="//lh4.googleusercontent.com/KeqWIpeAgYSIdhFQKhGZ3N_cRUqa35GiUpslAta95l5X=w306-h406-p-no"
+        			data-sha="NPOwFLT3CRcovyh4OO8Nyr9OzrOvyUHj++ytbMimUo0=" ></img></p>
+        </main>
+    </div>
+</body>
+</html>
