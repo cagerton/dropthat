@@ -227,7 +227,7 @@ On Javascript Cryptography
 
 ### Preface
 
-Javascript Cryptography isn't [inherently doomed (Matasano)](http://www.matasano.com/articles/javascript-cryptography/); it's just useful for different different types of problems. (JS Crypto can be an important part of this complete breakfast!)
+Javascript Cryptography isn't [inherently doomed (Matasano)](http://www.matasano.com/articles/javascript-cryptography/), it's just useful for different types of problems. (JS Crypto can be an important part of this complete breakfast!)
 
 ### Intro
 
