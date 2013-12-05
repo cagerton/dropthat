@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!--link rel="prefetch" href="loader3.js" /-->
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-security-policy" content="default-src 'self' blob:;style-src 'self' 'unsafe-inline' blob: data:;script-src 'self' 'unsafe-inline' blob: ; connect-src *; font-src blob: data: 'self'" /-->
+    <!-- sha2.js contains hashing code from SJCL; loader.js is where the magic happens. -->
+
+    <script >
+    if(!window.performance){var d0=Date.now();window.performance={now:function(){return Date.now()-d0;}}}; // fake it for safari.
+    
+    (function _observe(){
+        function workerLoad(el){
+            var worker = new Worker("loader3.js");
+            worker.addEventListener('message', function(m){
+                if(m.data.constructor==ArrayBuffer){
+                    deliverBuffer(el, m.data);
+                }
+            });
+            var msg = {
+                'sha': el.dataset.sha,
+                'url': el.dataset.src || el.dataset.href
+            };
+            worker.postMessage(msg);
+        }
+        function deliverBuffer(el, buffer){
+            var blob = new Blob([buffer], {type : el.dataset.type}),
+                url = window.URL.createObjectURL(blob),
+                url2;
+            el.onload = function _asset_load(){
+                console.log(el.tagName, performance.now(), String(buffer.byteLength)+'b');
+                setTimeout(function _cleanup(){
+                    if(url2) URL.revokeObjectURL(url2);
+                    URL.revokeObjectURL(url);
+                },100);
+            };
+            if(el.dataset.src){
+                el.src = url;
+            }else{
+                if(el.dataset.template){
+                    var target = el.dataset.template.replace(/blob:/, url),
+                        blob = new Blob([str2ab(target)], {type:'text/css'});
+                    el.href = url2 = URL.createObjectURL(blob);
+                }else{
+                    el.href = url;
+                }
+            }
+        }
+        var observer = new MutationObserver(function _handle_mutations(mutations){
+            mutations.forEach(function _handle_mutation(mutation){
+                for (var i = 0; i < mutation.addedNodes.length; i++){
+                    var node = mutation.addedNodes[i];
+                    if(node.dataset && node.dataset.sha){
+                        workerLoad(node);
+                    }else{
+                        if(node.querySelectorAll){
+                            var others = node.querySelectorAll('[data-sha]');
+                            [].slice.apply(others).forEach(workerLoad);
+                        }
+                    }
+                }
+            });
+        });
+        observer.observe(document,{childList:true, subtree:true });
+        function str2ab(str) {// from html5rocks
+            var buf = new ArrayBuffer(str.length);
+            var bufView = new Uint8Array(buf);
+            for (var i=0, strLen=str.length; i<strLen; i++) {
+                bufView[i] = str.charCodeAt(i);
+            }
+            return buf;
+         }
+    })();
+    </script>
+
+    <style>
+        /* wait a tick if we're not cached */
+        body { margin-left: 100%; font-size:1.2em;}
+    </style>
+
+    <link   data-href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"
+    		data-sha="HjsFM2lE3IJXUCrzudBjvWYpXHma/prhNo7d+0224lA="
+    		data-type="text/css"
+    		rel="stylesheet">
+    
+    <link   data-href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
+            data-sha="MIPo07Id3D8ObWXsNYCqbt+q3KXZc32cqifmojPhzPM="
+            data-type="text/css"
+            rel="stylesheet">
+
+    <!-- all modern browsers support woff anwyay: -->
+    <link  data-href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/fonts/fontawesome-webfont.woff?v=4.0.3"
+            data-sha="D9KP7Onr1ga4sHFGDr0/wu17x6Zu+RyINPEd+sq0qEk="
+            data-template="@font-face{font-family: 'FontAwesome'; src:url(blob:) format('woff');font-weight: normal;font-style: normal;}"
+            data-type="application/font-woff"
+            rel="stylesheet">
+
+    <script data-type="text/javascript"
+	        data-src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"
+	        data-sha="pXtSQrmprcTB74RsNlFHuJxHK5zXcPrOMx78uWU0ayU="></script>
+
+    <script data-type="text/javascript"
+            data-src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.10/d3.min.js"
+            data-sha="LCxiuGAdKmITwOdaUsNBlT0iyhcEsR9GPeL8iJcvQQE=" charset="utf-8"></script>
+
+</head>
+<body>
+	<div class="container">
+        <main class="col-md-8 col-md-offset-2">
+            <h1><i class="fa fa-random"></i> sha2loader (+Worker)</h1>
+            <p>Faster, and using more APIs.</p>
+            <p>
+            <img width="310" height="414"
+        			data-type="image/jpeg"
+        			data-src="//lh4.googleusercontent.com/KeqWIpeAgYSIdhFQKhGZ3N_cRUqa35GiUpslAta95l5X=w306-h406-p-no"
+        			data-sha="NPOwFLT3CRcovyh4OO8Nyr9OzrOvyUHj++ytbMimUo0=" ></img></p>
+        </main>
+    </div>
+</body>
+</html>

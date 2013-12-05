@@ -33,12 +33,13 @@
             rel="stylesheet">
 
     <script data-type="text/javascript"
-	        data-src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.10/d3.min.js"
-	        data-sha="LCxiuGAdKmITwOdaUsNBlT0iyhcEsR9GPeL8iJcvQQE=" charset="utf-8"></script>
-
-    <script data-type="text/javascript"
 	        data-src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"
 	        data-sha="pXtSQrmprcTB74RsNlFHuJxHK5zXcPrOMx78uWU0ayU="></script>
+
+    <script data-type="text/javascript"
+            data-src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.10/d3.min.js"
+            data-sha="LCxiuGAdKmITwOdaUsNBlT0iyhcEsR9GPeL8iJcvQQE=" charset="utf-8"></script>
+
 </head>
 <body>
 	<div class="container">
@@ -46,15 +47,15 @@
             <h1><i class="fa fa-random"></i> sha2loader</h1>
             <h3>Do you trust bootstrapcdn? cdnjs? aspnetcdn? googlecdn?<h3>
             <h3> <b>You shouldn't need to.</b></h3>
-        	<p>Sha2loader acts as an async asset loader and integrity verifier for scripts / css / images / or fonts that are hosted on servers outside your control. It lets you verify that each asset is exactly what you expected before using it. This could help mitigate the impact of public-CDN compromise or just reduce the number of your own servers that you need to trust.</p>
+        	<p>Sha2loader acts as a proof-of-concept async asset loader and integrity verifier for scripts / css / images / or fonts that are hosted on servers outside your control. It lets you verify that each asset is exactly what you expected before using it. This could help mitigate the impact of public-CDN compromise or just reduce the number of your own servers that you need to trust.</p>
             <h3>How it works:</h3>
-            <p>Once you've loaded sha2loader (preferably compressed to with sjcl and hosted on your own server) you can include tags with the data-sha and data-href/url attributes. You can also include a template to render css with blob-urls (for font loading). You'll need to specify urls that allow <a href="http://www.w3.org/TR/cors">cross origin resource shraring</a>.</p>
+            <p>Load the sha2loader script (preferably compressed together with sjcl and hosted on your own server) at the top of your page. You can then include tags with the data-sha and data-href/url attributes. You can also include a template to render css with blob-urls (for font loading). You'll need to specify urls that allow <a href="http://www.w3.org/TR/cors">cross origin resource shraring</a>.</p>
             <p>This page loads bootstrap.css, d3.js, jquery.js, font-awesome icons, and a jpg image using several distinct CDNs.</p>
-        	
             <h3>Under the hood</h3>
-            <p>The <a href="loader.js">loader.js</a> code is super simple. DOM modifications are picked up with a MutationObserver; any freshly inserted nodes containing the data-sha attribute are hijacked. The coresponding resources are loaded with XMLHttpRequests that have responseType='arraybuffer'.  It's relatively fast and easy to feed this response type into SJCL for hashing and then to convert it in to a blob-url for use. The whole process has significantly less overhead that I originally expected.</p>
+            <p>The <a href="loader.js">loader.js</a> code is super simple. DOM modifications are picked up with a MutationObserver; any freshly inserted nodes containing the data-sha attribute are hijacked. The coresponding resources are loaded with XMLHttpRequests that have responseType='arraybuffer'. It's relatively fast and easy to feed the resulting xhr respone into SJCL for hashing and then to convert it in to a blob-url for use. The whole process has significantly less overhead that I originally expected.</p>
             <h3>On a practical note</h3>
-            <p>Most CDNs are probably more secure than your servers, this is experimental code, and the RightWay&trade; to do this might involve adding native hash-checking support to the HTML spec. This is meant to be food for thought.</p>
+            <p>Most CDNs are probably far more secure than your server, this is experimental code, and the RightWay&trade; to do this might involve adding native hash-checking support to the HTML spec.</p>
+            <p>It could be neat to mash this up with ideas from <a href="http://addyosmani.github.io/basket.js/">basket.js</a> (like localStorage caching and some tpye of dependency management).</p>
             <p>
             <img width="310" height="414"
         			data-type="image/jpeg"

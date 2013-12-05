@@ -26,7 +26,8 @@
                     b_hsh = b64.fromBits(sha.hash(b));
                 if(b_hsh == el.dataset.sha){
                     var blob = new Blob([xhr.response], {type : el.dataset.type}),
-                        url = window.URL.createObjectURL(blob);
+                        url = URL.createObjectURL(blob),
+                        template_url;
                     if(el.dataset.src){
                         el.src = url;
                     }else{
@@ -35,9 +36,18 @@
                             var target = el.dataset.template.replace(/blob:/, url),
                                 array = new Uint8Array(bytes.fromBits(str.toBits(target))),
                                 blob = new Blob([array.buffer], {type:'text/css'});
-                            url = window.URL.createObjectURL(blob);
+                            template_url = URL.createObjectURL(blob);
+                            el.href = template_url;
+                        }else{
+                            el.href = url;
                         }
-                        el.href = url;
+                    }
+                    el.onload = function(){
+                        window.setTimeout(function(){
+                            URL.revokeObjectURL(url);
+                            if (template_url)  URL.revokeObjectURL(template_url);
+                        },300);
+                        console.log(performance.now())
                     }
                 }else{
                     throw new Error("Bad sha: "+b_hsh+" != "+el.dataset.sha);
@@ -48,10 +58,8 @@
     }
     var observer = new MutationObserver(function(mutations){
         mutations.forEach(function(mutation){
-            window.nodes = window.nodes || [];
             for (var i = 0; i < mutation.addedNodes.length; i++){
                 var node = mutation.addedNodes[i];
-                window.nodes.push(node);
                 if(node.dataset && node.dataset.sha){
                     xhrLoader(node);
                 }else{
