@@ -11,12 +11,12 @@ import subprocess
 import os
 
 PREFIX = '/opt/openresty'
-OPENSSL_DIR = os.path.join(os.getcwd(), 'openssl-1.0.1e')
-OPENRESTY_DIR = os.path.join(os.getcwd(), 'ngx_openresty-1.4.3.3')
+OPENSSL_DIR = os.path.join(os.getcwd(), 'openssl-1.0.1f')
+OPENRESTY_DIR = os.path.join(os.getcwd(), 'ngx_openresty-1.4.3.6')
 PCRE_DIR = os.path.join(os.getcwd(), 'pcre-8.33')
 FILES = (
-  ('http://openresty.org/download/ngx_openresty-1.4.3.3.tar.gz', '58438f999ec5f2f484b2ac43a29950a512fab361'),
-  ('http://www.openssl.org/source/openssl-1.0.1e.tar.gz', '3f1b1223c9e8189bfe4e186d86449775bd903460'),
+  ('http://openresty.org/download/ngx_openresty-1.4.3.6.tar.gz', 'fb7007680c7cccf371d29f0f7248c3bb7d70b2c0'),
+  ('http://www.openssl.org/source/openssl-1.0.1f.tar.gz', '9ef09e97dfc9f14ac2c042f3b7e301098794fc0f'),
   ('ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.33.tar.gz', 'bceafb53553219dad2593bb8af06da4d07fd3828'),
   # ('http://nginx.org/download/nginx-1.4.4.tar.gz', '304d5991ccde398af2002c0da980ae240cea9356'),
 )

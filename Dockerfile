@@ -1,10 +1,11 @@
-FROM   ubuntu:precise
+FROM   ubuntu
 
 RUN apt-get update
 RUN apt-get install -y curl language-pack-en build-essential libpcre3-dev zlib1g-dev \
 					   libatomic-ops-dev libaio-dev python git
 
 # the ADD command breaks the build cache: ADD build.py /usr/src/
+# RUN cd /usr/src && python ./build.py
 RUN cd /usr/src && curl -O https://raw.github.com/cagerton/dropthat/master/build.py && python ./build.py
 
 RUN useradd -r -M -s /bin/nologin nginx
@@ -16,4 +17,6 @@ ADD chat.conf       /opt/openresty/nginx/conf/nginx.conf
 ADD chat.lua        /opt/openresty/nginx/conf/
 ADD static/         /opt/openresty/nginx/html/
 
-CMD bash -c 'ulimit -n 65000 && /opt/openresty/nginx/sbin/nginx'
+EXPOSE 80
+
+CMD /opt/openresty/nginx/sbin/nginx
